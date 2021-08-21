@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable no-use-before-define */
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { GoogleApiWrapper, Map, Marker } from 'google-maps-react';
@@ -12,10 +14,11 @@ export const MapContainer = (props) => {
 
   function searchByQuery(query) {
     const service = new google.maps.places.PlacesService(map);
+    dispatch(setRestaurants([]));
 
     const request = {
       location: map.center,
-      radius: '20',
+      radius: '200',
       type: ['restaurant'],
       query,
     };
@@ -31,10 +34,11 @@ export const MapContainer = (props) => {
     if (query) {
       searchByQuery(query);
     }
-  }, [searchByQuery, query, map]);
+  }, [query]);
 
-  function getRestaurantDetails(placeId) {
+  function getRestaurantById(placeId) {
     const service = new google.maps.places.PlacesService(map);
+    dispatch(setRestaurant(null));
 
     const request = {
       placeId,
@@ -50,16 +54,17 @@ export const MapContainer = (props) => {
 
   useEffect(() => {
     if (placeId) {
-      getRestaurantDetails(placeId);
+      getRestaurantById(placeId);
     }
   }, [placeId]);
 
-  function searchNearBy(map, center) {
+  function searchNearby(map, center) {
     const service = new google.maps.places.PlacesService(map);
+    dispatch(setRestaurants([]));
 
     const request = {
       location: center,
-      radius: '200',
+      radius: '20000',
       type: ['restaurant'],
     };
 
@@ -72,7 +77,7 @@ export const MapContainer = (props) => {
 
   function onMapReady(_, map) {
     setMap(map);
-    searchNearBy(map, map.center);
+    searchNearby(map, map.center);
   }
 
   return (

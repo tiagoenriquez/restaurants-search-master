@@ -54,6 +54,7 @@ const Home = () => {
             outlined
             trailingIcon={<MaterialIcon role="button" icon="search" />}>
             <Input
+              type="text"
               value={inputValue}
               onKeyPress={handleKeyPress}
               onChange={(e) => setInputValue(e.target.value)}
